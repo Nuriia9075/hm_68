@@ -1,23 +1,23 @@
 [
-  {
+{
     "model": "articles.tag",
     "pk": 1,
     "fields": {
-      "title": "Программирование"
+        "title": "Программирование"
     }
-  },
-  {
+},
+{
     "model": "articles.tag",
     "pk": 2,
     "fields": {
-      "title": "Django"
+        "title": "Django"
     }
-  },
-  {
+},
+{
     "model": "articles.tag",
     "pk": 3,
     "fields": {
-      "title": "IT Новости"
+        "title": "IT Новости"
     }
-  }
+}
 ]
