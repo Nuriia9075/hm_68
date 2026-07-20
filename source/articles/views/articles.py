@@ -2,7 +2,9 @@ from urllib.parse import urlencode
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Q
+from django.http import JsonResponse
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from articles.forms import ArticleForm, SimpleSearchForm, ArticleDeleteForm
@@ -74,19 +76,6 @@ class ArticleUpdateView(PermissionRequiredMixin, UpdateView):
     model = Article
     permission_required = 'articles.change_article'
 
-    # def has_permission(self):
-    #     if super().has_permission():
-    #         return self.request.user.groups.filter(name='moderator').exists()
-    #     return self.request.user == self.get_object().author
-
-    # def dispatch(self, request, *args, **kwargs):
-    #     user = request.user
-    #     if not user.is_authenticated:
-    #         return redirect('articles:list')
-    #     if not user.has_perm('articles.change_article'):
-    #         raise PermissionDenied
-    #     return super().dispatch(request, *args, **kwargs)
-
 class ArticleDeleteView(DeleteView):
     template_name = "articles/delete_confirm.html"
     model = Article
@@ -100,7 +89,13 @@ class ArticleDeleteView(DeleteView):
             kwargs['instance'] = self.object
         return kwargs
 
-    # def post(self, request, *args, **kwargs):
-    #     article = get_object_or_404(Article, pk=self.kwargs.get('pk'))
-    #     article.delete()
-    #     return redirect("list")
+class ArticleLikes(View):
+    def get(self, request, *args, **kwargs):
+        article_id = self.kwargs.get('pk')
+        article = Article.objects.get(pk=article_id)
+        user = self.request.user
+
+        if article:
+            return JsonResponse({'likes': 'unlike'})
+
+

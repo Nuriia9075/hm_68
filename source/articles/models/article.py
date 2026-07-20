@@ -50,6 +50,7 @@ class Article(BaseModel):
         through_fields=("article", "tag"),
         verbose_name="Теги"
     )
+    likes = models.ManyToManyField(get_user_model(), related_name='liked_articles', blank=True)
 
     def __str__(self):
         return self.title
