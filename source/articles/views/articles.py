@@ -1,12 +1,10 @@
 from urllib.parse import urlencode
-
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Q
 from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
 from articles.forms import ArticleForm, SimpleSearchForm, ArticleDeleteForm
 from articles.models import Article
 
@@ -49,9 +47,6 @@ class ArticleListView(ListView):
             context['query'] = urlencode({"search": self.search_value})
             context['search_value'] = self.search_value
         return context
-
-
-
 class ArticleDetailView(DetailView):
     template_name = "articles/article_view.html"
     model = Article
@@ -60,8 +55,6 @@ class ArticleDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['comments'] = self.object.comments.all()
         return context
-
-
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     template_name = "articles/article_create.html"
     form_class = ArticleForm
@@ -89,13 +82,20 @@ class ArticleDeleteView(DeleteView):
             kwargs['instance'] = self.object
         return kwargs
 
-class ArticleLikes(View):
+
+class ArticleLikes(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         article_id = self.kwargs.get('pk')
         article = Article.objects.get(pk=article_id)
         user = self.request.user
-
-        if article:
-            return JsonResponse({'likes': 'unlike'})
-
-
+        if user.is_authenticated:
+            if article.likes.filter(id=user.id).exists():
+                article.likes.remove(user)
+                like = "unlike"
+            else:
+                article.likes.add(user)
+                like = "like"
+            return JsonResponse({
+                "like": like,
+                "count": article.likes.count()
+            })

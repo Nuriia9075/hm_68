@@ -13,7 +13,7 @@ async function onClick(event) {
     let counter = document.getElementById(counterId);
     let url = link.href;
     let response = await makeRequest(url);
-    console.log(response);
+    console.log( response);
     if (response && response.like) {
         if (response.like === "like") {
             link.innerText = "🩶 Убрать";
@@ -26,7 +26,7 @@ async function onClick(event) {
     }
 }
 function onLoad() {
-    let links = document.querySelectorAll('[data-key="likes"]');
+    let links = document.querySelectorAll('[data-key="comment-likes"]');
     for (let link of links){
        link.addEventListener('click', onClick);
     }

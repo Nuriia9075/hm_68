@@ -15,14 +15,27 @@
                         <span>Блог: {% if article.blog %}{{ article.blog.title }}{% else %}---{% endif %}</span>
                     </div>
                     <div class="text-end me-3">
-                        <a href="{% url 'articles:update' article.pk %}" class="btn btn-outline-warning">
+                        <a href="{% url 'articles:update' article.pk %}" class="btn btn-sm btn-outline-warning">
                             <i class="fa-regular fa-pen-to-square"></i>
                         </a>
-                        <a href="{% url 'articles:delete' article.pk %}" class="btn btn-outline-danger">
+                        <a href="{% url 'articles:delete' article.pk %}" class="btn btn-sm btn-outline-danger">
                             <i class="fa-regular fa-trash-can"></i>
                         </a>
-                        <span id="count-{{ article.pk }}"></span>
-                        <a href="{% url 'articles:api-like' article.pk %}" class="btn btn-outline-secondary" data-key='likes' data-counter-id="count-{{ article.pk }}">like</a>
+                        <div class="d-flex align-items-center border rounded px-2 py-1 bg-light gap-2">
+                            <span id="article-count-{{ article.pk }}" class="like-count">
+                                {{ article.likes.count }}
+                            </span>
+                            <a href="{% url 'articles:api-like' article.pk %}"
+                             class="btn btn-sm btn-outline-secondary btn-like"
+                               data-key="likes"
+                               data-counter-id="article-count-{{ article.pk }}">
+                                {% if request.user in article.likes.all %}
+                                 🩶 Убрать
+                                {% else %}
+                                    ❤️ Like
+                                {% endif %}
+                            </a>
+                        </div>
                     </div>
                 </div>
             </a>

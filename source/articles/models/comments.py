@@ -16,6 +16,7 @@ class Comment(BaseModel):
         related_name="comments",
         verbose_name="Автор"
     )
+    likes = models.ManyToManyField(get_user_model(), related_name='liked_comments', blank=True)
 
     def __str__(self):
         return self.text[:20]

@@ -24,9 +24,21 @@
             <a href="{% url 'articles:delete' article.pk %}" class="btn btn-outline-danger">
                 <i class="fa-regular fa-trash-can"></i>
             </a>
-{#            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#article-{{ article.pk }}-Modal">#}
-{#                <span>Удалить</span><i class="fa-regular fa-trash-can ms-2"></i>#}
-{#            </button>#}
+              <div class="d-flex align-items-center border rounded px-2 py-1 bg-light gap-2">
+               <span id="article-count-{{ article.pk }}" class="like-count">
+                    {{ article.likes.count }}
+                </span>
+                <a href="{% url 'articles:api-like' article.pk %}"
+                   class="btn btn-sm btn-outline-secondary btn-like"
+                   data-key="likes"
+                   data-counter-id="article-count-{{ article.pk }}">
+                    {% if request.user in article.likes.all %}
+                     🩶 Убрать
+                    {% else %}
+                        ❤️ Like
+                    {% endif %}
+                </a>
+            </div>
         </div>
     </div>
         <div class="card my-5">
@@ -36,6 +48,21 @@
         <div class="card-body">
             {% for comment in article.comments.all %}
                 <p>{{ forloop.counter }}. {{ comment }}</p>
+                <div class="d-flex align-items-center border rounded px-2 py-1 bg-light gap-2">
+               <span id="comment-count-{{ comment.pk }}" class="like-count">
+                    {{ comment.likes.count }}
+                    </span>
+                    <a href="{% url 'articles:comment-like' article.pk comment.pk %}"
+                       class="btn btn-sm btn-outline-secondary btn-like"
+                    data-key="comment-likes"
+                    data-counter-id="comment-count-{{ comment.pk }}">
+                    {% if request.user in comment.likes.all %}
+                     🩶 Убрать
+                    {% else %}
+                        ❤️ Like
+                    {% endif %}
+                </a>
+            </div>
                 {% empty %}
                 <p>Комментариев нет</p>
             {% endfor %}

@@ -6,3 +6,4 @@ from articles.views.articles import ArticleDeleteView
 from articles.views.articles import ArticleLikes
 
 from articles.views.comments import CommentCreateView
+from articles.views.comments import CommentLikes
