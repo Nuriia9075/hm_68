@@ -44,10 +44,9 @@ INSTALLED_APPS = [
 
     'accounts',
     'articles',
-    'calculator',
-    "webapp",
-
-    'django_bootstrap5'
+    'crudAPI',
+    'django_bootstrap5',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
